@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/theme.js' %}" defer></script>
+    <title>Delete Student</title>
+</head>
+<body>
+    {% include 'student/theme_switcher.html' %}
+    <main class="container">
+        <section class="table-card">
+            <h2>Confirm Deletion</h2>
+
+            <p>Are you sure you want to delete
+                <strong>{{ student.name }}</strong>?
+            </p>
+
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">
+                    Yes, Delete
+                </button>
+                <a href="{% url 'student_list' %}" class="edit-btn">
+                    Cancel
+                </a>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

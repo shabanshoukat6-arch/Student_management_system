@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/theme.js' %}" defer></script>
+    <title>Edit Student</title>
+</head>
+<body>
+    {% include 'student/theme_switcher.html' %}
+    <main class="container">
+        <section class="table-card">
+            <h2>Edit Student: {{ student.name }}</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="add-btn">Save Changes</button>
+                <a href="{% url 'student_list' %}" class="edit-btn">
+                    Cancel
+                </a>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

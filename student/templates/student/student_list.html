@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/theme.js' %}" defer></script>
+
+    <title>Student Dashboard</title>
+</head>
+
+<body>
+
+    {% include 'student/theme_switcher.html' %}
+
+    <header class="topbar">
+        <h1>Student Management System</h1>
+        <p>Manage your student records in one place</p>
+    </header>
+
+    <main class="container">
+
+        <section class="welcome">
+            <div>
+                <h2>Students's Data</h2>
+                <p>View and manage all registered students.</p>
+            </div>
+
+            <a href="{% url 'home' %}" class="add-btn">
+                + Add Student
+            </a>
+        </section>
+
+        <section class="stats">
+
+            <div class="stat-card">
+                <span>Total Students</span>
+                <h2>{{ students|length }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <span>System Status</span>
+                <h2 class="active">Active</h2>
+            </div>
+
+        </section>
+
+        <section class="table-card">
+
+            <h3>Registered Students</h3>
+
+            <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Search by name or roll number..."
+                aria-label="Search students"
+            >
+
+            <div class="table-wrapper">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll No.</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                            <th class="actions-heading">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="studentTable">
+
+                        {% for student in students %}
+
+                        <tr
+                            class="student-row"
+                            data-name="{{ student.name|lower }}"
+                            data-roll="{{ student.roll_no }}"
+                        >
+                            <td>{{ student.roll_no }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.age }}</td>
+                            <td>{{ student.get_gender_display }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.department }}</td>
+
+                            <td class="actions">
+
+                                <a
+                                    href="{% url 'edit_student' student.pk %}"
+                                    class="edit-btn"
+                                >
+                                    Edit
+                                </a>
+
+                                <a
+                                    href="{% url 'delete_student' student.pk %}"
+                                    class="delete-btn"
+                                >
+                                    Delete
+                                </a>
+
+                            </td>
+                        </tr>
+
+                        {% empty %}
+
+                        <tr class="empty-row">
+                            <td colspan="7" class="empty">
+                                No students registered yet.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <p id="noSearchResults" class="empty" hidden>
+                No matching students found.
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer>
+        Developed By: Muhammad Shaban Shoukat
+        <br>
+        Student Management System &copy; 2026
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById("searchInput");
+        const rows = document.querySelectorAll(".student-row");
+        const noSearchResults = document.getElementById("noSearchResults");
+
+        searchInput.addEventListener("input", function () {
+            const query = this.value.toLowerCase().trim();
+            let visibleRows = 0;
+
+            rows.forEach(function (row) {
+                const name = row.dataset.name || "";
+                const roll = row.dataset.roll || "";
+
+                const matches =
+                    name.includes(query) || roll.toLowerCase().includes(query);
+
+                row.style.display = matches ? "" : "none";
+
+                if (matches) {
+                    visibleRows++;
+                }
+            });
+
+            noSearchResults.hidden =
+                visibleRows !== 0 || rows.length === 0;
+        });
+    </script>
+
+</body>
+</html>

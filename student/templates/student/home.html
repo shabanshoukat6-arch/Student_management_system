@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<script src="{% static 'js/theme.js' %}" defer></script>
+    <title>Student Management System</title>
+    
+
+</head>
+<body>
+    {% include 'student/theme_switcher.html' %}
+<form method="POST" action="{% url 'add_student' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add Student</button>
+</form>
+
+    
+</body>
+</html>
